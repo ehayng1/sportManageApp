@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "sportsApp",
-    "slug": "sportsApp",
+    "name": "Brooks Athletics",
+    "slug": "BrooksAthletics",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,16 +15,23 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ehayng1.BrooksAthletics"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ehayng1.BrooksAthletics"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bd2765a9-c10a-43f5-9bb7-b3642dd27113"
+      }
     }
   }
 }

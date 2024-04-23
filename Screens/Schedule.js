@@ -18,7 +18,14 @@ import {
   WeekCalendar,
 } from "react-native-calendars";
 import React, { useEffect, useState } from "react";
-import { query, getDocs, collection, setDoc, doc } from "firebase/firestore";
+import {
+  query,
+  getDocs,
+  collection,
+  setDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { MatchDetail } from "./MatchDetail";
 import { Add } from "./Add";
@@ -28,6 +35,7 @@ import { getEvents } from "../Utils/firebase";
 import { getAuth } from "firebase/auth";
 
 function Schedule({ navigation }) {
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [matchCount, setMatchCount] = React.useState();
   // change this to today
@@ -104,6 +112,23 @@ function Schedule({ navigation }) {
   useEffect(() => {
     const init = async () => {
       const auth = getAuth();
+      const email = auth.currentUser.email;
+      const docRef = doc(db, "Users", email);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        if (docSnap.data().isAdmin) {
+          setIsAdmin(true);
+        }
+      }
+    };
+    init();
+  }, []);
+
+  useEffect(() => {
+    const init = async () => {
+      const auth = getAuth();
       setEmail(auth.currentUser.email);
       console.log("Email: ", auth.currentUser.email);
     };
@@ -137,7 +162,7 @@ function Schedule({ navigation }) {
       headerRight: () => (
         <>
           {/* email === admin@admin.com */}
-          {true && (
+          {isAdmin && (
             <Button
               onPress={() => navigation.navigate("Add")}
               title="Add"
@@ -147,7 +172,7 @@ function Schedule({ navigation }) {
         </>
       ),
     });
-  }, [navigation]);
+  }, [navigation, isAdmin]);
 
   return (
     <ScrollView>

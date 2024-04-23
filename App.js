@@ -96,8 +96,8 @@ function MyTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MyTabs">
-        {/* <Stack.Navigator initialRouteName="Login"> */}
+      {/* <Stack.Navigator initialRouteName="MyTabs"> */}
+      <Stack.Navigator initialRouteName="Login">
         {/* <MyTabs /> */}
         <Stack.Screen
           name="MyTabs"

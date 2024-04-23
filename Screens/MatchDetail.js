@@ -40,6 +40,7 @@ export function MatchDetail({
   date,
   location,
 }) {
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLive, setisLive] = useState();
   const [liveState, setLiveState] = React.useState(
     calculateLiveState(route.params.date, route.params.hour)
@@ -49,7 +50,7 @@ export function MatchDetail({
   const [comment, setComment] = React.useState("");
   const [comments, setComments] = React.useState({});
   // const [score1, setScore1] = useState(route.params.score1);
-  const [score1, setScore1] = useState();
+  const [score1, setScore1] = useState(route.params.score1);
   const [score2, setScore2] = useState(route.params.score2);
 
   async function getMatches() {
@@ -77,6 +78,23 @@ export function MatchDetail({
       console.log("No username document!");
     }
   }
+
+  useEffect(() => {
+    const init = async () => {
+      const auth = getAuth();
+      const email = auth.currentUser.email;
+      const docRef = doc(db, "Users", email);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        if (docSnap.data().isAdmin) {
+          setIsAdmin(true);
+        }
+      }
+    };
+    init();
+  }, []);
 
   useEffect(() => {
     const init = async () => {
@@ -167,7 +185,7 @@ export function MatchDetail({
                 padding: 5,
                 paddingLeft: 10,
                 paddingRight: 10,
-                // marginRight: wp("5%"),
+                marginRight: wp("2%"),
               }}
             >
               <Text style={{ color: "white", fontWeight: "700" }}>
@@ -175,7 +193,7 @@ export function MatchDetail({
               </Text>
             </View>
           )}
-          {true && (
+          {isAdmin && (
             <Pressable>
               <Button onPress={updateScores} title="Save" color="green" />
             </Pressable>
@@ -183,7 +201,7 @@ export function MatchDetail({
         </View>
       ),
     });
-  }, [navigation, score1, score2]);
+  }, [navigation, score1, score2, isAdmin]);
 
   useEffect(() => {
     const init = async () => {
@@ -235,8 +253,8 @@ export function MatchDetail({
               {route.params.team1}
             </Text>
             {/* show this for isAdmin */}
-            <View style={{ display: "flex", flexDirection: "row" }}>
-              {true ? (
+            <View>
+              {isAdmin ? (
                 <TextInput
                   style={styles.scoreInput}
                   // onChangeText={setScore1}
@@ -244,24 +262,22 @@ export function MatchDetail({
                     setScore1(newValue);
                   }}
                   value={score1}
-                  placeholder="Type score1"
-                  // placeholderTextColor={"ivory"}
+                  placeholder={route.params.score1.toString()}
+                  // placeholder="Type score1"
                 />
               ) : (
-                score1 && (
-                  <Text
-                    style={{
-                      marginTop: hp("1%"),
-                      color: "white",
-                      textAlign: "center",
-                      fontSize: 36,
-                      fontWeight: "600",
-                    }}
-                  >
-                    {/* {route.params.score1} */}
-                    {score1}
-                  </Text>
-                )
+                <Text
+                  style={{
+                    marginTop: hp("1%"),
+                    color: "white",
+                    textAlign: "center",
+                    fontSize: 36,
+                    fontWeight: "600",
+                  }}
+                >
+                  {route.params.score1}
+                  {/* {score1} */}
+                </Text>
               )}
             </View>
           </View>
@@ -296,13 +312,13 @@ export function MatchDetail({
             >
               {route.params.team2}
             </Text>
-            <View style={{ display: "flex", flexDirection: "row" }}>
-              {true ? (
+            <View>
+              {isAdmin ? (
                 <TextInput
                   style={styles.scoreInput}
                   onChangeText={setScore2}
                   value={score2}
-                  placeholder="Type score2"
+                  placeholder={route.params.score2.toString()}
                   // placeholderTextColor={"ivory"}
                 />
               ) : (
@@ -378,6 +394,7 @@ export function MatchDetail({
           {Object.values(comments).map((comment, i) => (
             <>
               <View
+                key={i}
                 style={{
                   display: "flex",
                   flexDirection: "row",

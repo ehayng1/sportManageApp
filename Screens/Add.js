@@ -15,6 +15,7 @@ import {
   setDoc,
   doc,
   addDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import {
   widthPercentageToDP as wp,
@@ -36,6 +37,7 @@ export function Add() {
   async function addEvent() {
     console.log("EventInfo: ", eventInfo);
     eventInfo.points = Number(eventInfo.points);
+    eventInfo.timestamp = serverTimestamp();
     await uploadEvent(eventInfo);
     setEventInfo({});
     alert("Event added!");
