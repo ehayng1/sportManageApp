@@ -44,8 +44,10 @@ export default function SignUp(props) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [grade, setGrade] = useState("");
+  const [signupError, setSignupError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isNext, setIsNext] = useState(true);
+  const [isNext, setIsNext] = useState(false);
   const [favorites, setFavorites] = useState([]);
 
   // if user presses the back button, asks for exit
@@ -87,19 +89,31 @@ export default function SignUp(props) {
     if (email == "") {
       {
         alert("Please enter an email.");
+        setSignupError(true);
         return;
       }
     } else if (name == "") {
       alert("Please enter your name.");
+      setSignupError(true);
       return;
     } else if (password == "") {
       alert("Please enter your password.");
+      setSignupError(true);
       return;
     } else if (confirmPassword == "") {
+      alert("Please enter your password twice.");
       setConfirmPasswordError("Please confirm your password.");
+      setSignupError(true);
       return;
     } else if (password != confirmPassword) {
+      alert("Passwords does not match.");
       setConfirmPasswordError("Passwords does not match.");
+      setSignupError(true);
+      return;
+    } else if (grade == "" || !Number.isInteger(Number(grade))) {
+      alert("Please enter grade properly.");
+      setConfirmPasswordError("Passwords does not match.");
+      setSignupError(true);
       return;
     }
 
@@ -123,7 +137,7 @@ export default function SignUp(props) {
         // console.log("Document written with ID: ", docRef.id);
 
         setLoading(false);
-        setIsNext(!isNext);
+        setIsNext(true);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -136,6 +150,9 @@ export default function SignUp(props) {
           alert("Email format is not correct.");
         } else if (errorCode == "auth/weak-password") {
           alert("Password is too weak.");
+        } else {
+          // setErrorMessage(errorCode)
+          alert(errorCode);
         }
         setLoading(false);
       });
@@ -147,7 +164,7 @@ export default function SignUp(props) {
     await setDoc(doc(db, "Favorites", email), favorites);
   }
 
-  return isNext ? (
+  return !isNext ? (
     <View style={styles.container}>
       {/* <KeyboardAwareScrollView> */}
       <Text
@@ -253,7 +270,6 @@ export default function SignUp(props) {
         }}
         onPress={() => {
           register();
-          //   setIsNext(!isNext);
         }}
         // onPress={() => {
         //   //   props.navigation.navigate("Favorites");

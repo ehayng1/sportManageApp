@@ -215,7 +215,7 @@ export function Profile({ navigation }) {
           <View
             style={{
               backgroundColor: "white",
-              borderRadius: "10px",
+              borderRadius: 10,
               padding: wp("3%"),
             }}
           >

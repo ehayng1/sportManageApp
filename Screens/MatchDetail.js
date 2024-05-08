@@ -394,7 +394,7 @@ export function MatchDetail({
           {Object.values(comments).map((comment, i) => (
             <>
               <View
-                key={i}
+                key={comment.id}
                 style={{
                   display: "flex",
                   flexDirection: "row",

@@ -7,23 +7,23 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ehayng1.BrooksAthletics"
+      "bundleIdentifier": "com.ehayng1.BrooksAthletics",
+      "buildNumber": "5"
     },
     "android": {
+      "versionCode": 5,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ehayng1.BrooksAthletics"
+      "package": "com.ehayng1.BrooksAthleticsAndriod"
     },
     "web": {
       "favicon": "./assets/favicon.png"

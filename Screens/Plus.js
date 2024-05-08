@@ -9,13 +9,14 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Button as RNButton,
 } from "react-native";
 import {
   FontAwesome,
   MaterialCommunityIcons,
   AntDesign,
 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -36,8 +37,8 @@ import {
   RecordButton,
   Header,
   Row,
-  Button,
   Description,
+  Button,
 } from "./styles";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebase";
@@ -57,16 +58,18 @@ export function Plus() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
 
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const auth = getAuth();
 
-  // useEffect(() => {
-  //   async function permission() {
-  //     const { status } = await Camera.requestPermissionsAsync();
-  //     setHasPermission(status === "granted");
-  //     StatusBar.setHidden(true);
-  //   }
-  //   permission();
-  // }, []);
+  useEffect(() => {
+    // async function permission() {
+    //   const { status } = await Camera.requestPermissionsAsync();
+    //   setHasPermission(status === "granted");
+    //   StatusBar.setHidden(true);
+    // }
+    // permission();
+    requestPermission();
+  }, []);
 
   if (!permission) {
     // Camera permissions are still loading
@@ -78,9 +81,15 @@ export function Plus() {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: "center" }}>
-          We need your permission to show the camera
+          We need your permission to shoçw the camera
         </Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        {/* <Button onPress={requestPermission}>
+          <Text style={{ textAlign: "center" }}>Grant Permission</Text>
+        </Button> */}
+        <RNButton
+          title="Grant Permission"
+          onPress={requestPermission}
+        ></RNButton>
       </View>
     );
   }
@@ -191,46 +200,48 @@ export function Plus() {
 
   return photoReady ? (
     <>
-      <Camera
-        style={{ flex: 1 }}
-        type={type}
-        ref={(ref) => {
-          this.camera = ref;
-        }}
-      >
-        <Container>
-          <Header>
-            <Button
-              onPress={() => {
-                StatusBar.setHidden(false);
-                navigation.goBack();
-              }}
-            >
-              <AntDesign name="close" size={28} color="#fff" />
-            </Button>
-            {/* flips camera */}
-            <Button onPress={toggleCameraType}>
-              <MaterialCommunityIcons
-                name="rotate-right"
-                size={28}
-                color="#fff"
-              />
-            </Button>
-          </Header>
-          {/* <TouchableOpacity
+      {isFocused && (
+        <Camera
+          style={{ flex: 1 }}
+          type={type}
+          ref={(ref) => {
+            this.camera = ref;
+          }}
+        >
+          <Container>
+            <Header>
+              <Button
+                onPress={() => {
+                  StatusBar.setHidden(false);
+                  navigation.goBack();
+                }}
+              >
+                <AntDesign name="close" size={28} color="#fff" />
+              </Button>
+              {/* flips camera */}
+              <Button onPress={toggleCameraType}>
+                <MaterialCommunityIcons
+                  name="rotate-right"
+                  size={28}
+                  color="#fff"
+                />
+              </Button>
+            </Header>
+            {/* <TouchableOpacity
             onPress={() => {
               takePicture();
             }}
           >
             <RecordButton />
           </TouchableOpacity> */}
-          <RecordButton
-            onPress={() => {
-              takePicture();
-            }}
-          ></RecordButton>
-        </Container>
-      </Camera>
+            <RecordButton
+              onPress={() => {
+                takePicture();
+              }}
+            ></RecordButton>
+          </Container>
+        </Camera>
+      )}
       {/* <Text>Write a caption</Text> */}
     </>
   ) : (

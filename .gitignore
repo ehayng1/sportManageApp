@@ -34,4 +34,14 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-/firebase.js
+/firebaseConfig.js
+/app.json
+/eas.json
+/eas_old.json
+/google/
+/dist/
+/ios/
+/pc-api-8624190404851205218-816-353e3e1ccd1c.json
+
+certificate_for_google.pem
+credentials.json

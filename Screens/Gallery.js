@@ -23,6 +23,7 @@ import {
   arrayRemove,
   arrayUnion,
   getDocs,
+  increment,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebase";
@@ -74,11 +75,21 @@ export function Gallery() {
   }
 
   async function removeLike(docId) {
-    // implement this
+    let newPost = [...posts];
+    let postToUpdate = newPost.find((post) => post.docId === docId);
+    if (postToUpdate) {
+      postToUpdate.likes = postToUpdate.likes - 1;
+      postToUpdate.likedUsers = postToUpdate.likedUsers.filter(
+        (liked) => liked != id
+      );
+    }
+    console.log("New post", newPost);
+    setPosts(newPost);
     const docRef = doc(db, "Gallery", docId);
 
     await updateDoc(docRef, {
       likedUsers: arrayRemove(id),
+      likes: increment(-1),
     });
   }
 
@@ -94,7 +105,7 @@ export function Gallery() {
       {posts.map((post, i) => (
         <>
           <Post
-            key={post.uri}
+            key={post.docId}
             userName={post.userName}
             likes={post.likes}
             description={post.caption}

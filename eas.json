@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 7.8.2"
+    "version": ">= 7.8.2",
+    "promptToConfigurePushNotifications": false
   },
   "build": {
     "development": {
@@ -13,6 +14,15 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./pc-api-8624190404851205218-816-353e3e1ccd1c.json"
+      },
+      "ios": {
+        "appleId": "lil21221y@naver.com",
+        "ascAppId": "6499181508",
+        "appleTeamId": "7J295N283A"
+      }
+    }
   }
 }
